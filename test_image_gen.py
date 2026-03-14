@@ -41,10 +41,11 @@ def test_image_generation():
         print(f"      Device: {device.upper()}")
 
         pipe = StableDiffusionPipeline.from_pretrained(
-            "stabilityai/stable-diffusion-2-1",
+            "runwayml/stable-diffusion-v1-5",
             torch_dtype=dtype,
             safety_checker=None,
-            requires_safety_checker=False
+            requires_safety_checker=False,
+            token ='api_key'
         )
         pipe = pipe.to(device)
 
