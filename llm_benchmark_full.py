@@ -59,7 +59,7 @@ warnings.filterwarnings("ignore")
 # ─────────────────────────────────────────────
 OLLAMA_BASE  = "http://localhost:11434"
 TEXT_MODEL   = "llama3"           # auto-fallback to mistral/llama2
-SD_MODEL     = "stabilityai/stable-diffusion-2-1"  # HuggingFace model ID
+SD_MODEL     = "runwayml/stable-diffusion-v1-5"
 RUNS         = 3                  # runs per case
 MAX_TOKENS   = 800
 IMAGE_W      = 512
@@ -234,11 +234,14 @@ def run_image_benchmark(model, run_num):
             print(f"     Subsequent runs: loads from local cache (fast)")
             device = "cuda" if torch.cuda.is_available() else "cpu"
             dtype  = torch.float16 if device == "cuda" else torch.float32
+            HF_TOKEN = ""   # ← paste your token here if needed, leave empty otherwise
+
             _sd_pipeline = StableDiffusionPipeline.from_pretrained(
                 SD_MODEL,
                 torch_dtype=dtype,
                 safety_checker=None,
-                requires_safety_checker=False
+                requires_safety_checker=False,
+                token=HF_TOKEN if HF_TOKEN else None
             )
             _sd_pipeline = _sd_pipeline.to(device)
             # Memory optimization for CPU
